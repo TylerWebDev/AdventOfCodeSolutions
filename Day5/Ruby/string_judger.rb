@@ -8,6 +8,14 @@ class StringJudger
     num_nice_strings
   end
 
+  def letter_pair?(str)
+    # returns false more often
+    str.split('').each_with_index.any? do |letter, i|
+      target = str[i..i.next]
+      target.length == 2 && str.sub(target,' ').include?(target)
+    end
+  end
+
   def legacy_judge_input(input)
     num_nice_strings = 0
     input.split("\n").each do |word|
@@ -33,7 +41,7 @@ class StringJudger
   end
 
   def nice?(str)
-    letter_pair?(str)
+    letter_pair?(str) && letter_sandwhich?(str)
   end
 
   # don't use this - it's old but necesary until refactored out
@@ -41,15 +49,16 @@ class StringJudger
     repeated_letters?(str) && !blacklisted_strings?(str) && three_vowels?(str)
   end
 
-  def letter_pair?(str)
-    match = false
-    str.split('').each_with_index do |letter, i|
-      if i + 1 < str.length
-        target = letter + str[i+1]
-        match = true if str.sub(target,'').include? target
-      end
+  def letter_sandwhich?(str)
+    str.split('').any? do |letter, i|
+      match = true if str=~(/#{letter}.#{letter}/) 
     end
-    match
+  end
+
+  def letter_sandwhich?(str)
+    str.split('').any? do |letter, i|
+      match = true if str=~(/#{letter}.#{letter}/) 
+    end
   end
 
   def three_vowels?(str)
@@ -67,6 +76,10 @@ class StringJudger
   end
 end
 
+input = File.read('nice_or_naughty_strings.txt')
+
 # output solution to part 1
-# input = File.read('nice_or_naughty_strings.txt')
-# puts StringJudger.new.judge_input(input)
+# puts StringJudger.new.legacy_judge_input(input)
+
+# output solution to part 2
+puts StringJudger.new.get_outliers(input)

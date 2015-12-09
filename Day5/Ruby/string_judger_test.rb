@@ -6,8 +6,8 @@ require 'pry'
 class StringJudgerTest < Test::Unit::TestCase
   def test_input
     sj = StringJudger.new
-    assert_equal true, sj.letter_pair?("xyxy")
-    assert_equal false, sj.letter_pair?("aaa")
+    input = "qjhvhtzxzqqjkmpb\nxxyxx\nuurcxstgmygtbstg\nieodomkazucvgmuy\nmmggfwapsetemiuj"
+    assert_equal 2, sj.judge_input(input)
   end
 
   def test_input_legacy
